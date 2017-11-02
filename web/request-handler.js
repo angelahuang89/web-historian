@@ -1,7 +1,42 @@
-var path = require('path');
 var archive = require('../helpers/archive-helpers');
+var fs = require('fs');
+var helpers = require('./http-helpers.js');
 // require more modules/folders here!
 
+
+//Next step:
+//Take index's form input
+//Check it against the url list 
+
+var url;
+var archivedSite;
 exports.handleRequest = function (req, res) {
-  res.end(archive.paths.list);
+  if (req.method === 'GET') {
+    fs.readFile(archive.paths.siteAssets + '/index.html', function(err, data) {
+      if (err) {
+        throw err;
+      }
+      res.end(data);
+    });
+  } else if (req.method === 'POST') {
+    var body = [];
+
+    req.on('data', function(chunk){
+      body.push(chunk);
+    });
+
+    req.on('end', function(chunk){
+      body = Buffer.concat(body).toString();
+      url = body.slice(4);
+      // archivedSite = archive.isUrlInList(url, readList);
+      archive.readListOfUrls(function(sitesText) {
+        console.log('sitesText: ', sitesText);
+        archive.isUrlInList(url, function(sitesText) {
+          
+        });
+      });
+    });
+    res.end();
+  }
+  // res.end(archive.paths.list); WILL NEED THIS LATER...?
 };
