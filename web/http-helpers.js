@@ -10,7 +10,7 @@ exports.headers = {
   'Content-Type': 'text/html'
 };
 
-exports.serveAssets = function(res, asset, callback) {
+exports.serveAssets = function(res, asset, callback, statusCode) {
   // var asset = archive.paths.archivedSites + '/' + asset;
 
   fs.readFile(asset, 'utf8', (err, data) => {

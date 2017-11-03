@@ -98,8 +98,9 @@ exports.handleRequest = function (req, res) {
         } else {
           console.log('url when NOT found in list: ', url);
           archive.addUrlToList(url, () => {
-            statusCode = 404;
+            statusCode = 302;
             helpers.serveAssets(res, archive.paths.siteAssets + '/loading.html', (page) => {
+              res.writeHead(statusCode, this.headers);
               res.end(page);
             });
           });
@@ -113,8 +114,8 @@ exports.handleRequest = function (req, res) {
       //   });
       // });
     });
-    res.writeHead(302, this.headers);
-    res.end(archive.paths.list);
+    // res.writeHead(302, this.headers);
+    // res.end(archive.paths.list);
   }
   // res.end(archive.paths.list); WILL NEED THIS LATER...?
 };
