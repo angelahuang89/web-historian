@@ -11,13 +11,22 @@ exports.headers = {
 };
 
 exports.serveAssets = function(res, asset, callback) {
-  var asset = archive.paths.archivedSites + '/' + asset;
+  // var asset = archive.paths.archivedSites + '/' + asset;
 
-  var page = fs.readFile(asset, (err, data) => {
-    var sitesText = data.toString();
+  fs.readFile(asset, 'utf8', (err, data) => {
+    
+    if (err) {
+      res.writeHead(404);
+      res.end();
+      return;
+    } 
+    res.writeHead(200, this.headers);
+    res.end(data);
+    
+    // console.log('this is data', data)
+    // callback(data.toString());
     // sitesArray = sitesText.split('\n');
   });
-  callback(page);
   // Write some code here that helps serve up your static files!
   // (Static files are things like html (yours or archived from others...),
   // css, or anything that doesn't change often.)
