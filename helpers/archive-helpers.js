@@ -42,52 +42,16 @@ exports.readListOfUrls = function(callback) {
 
 exports.isUrlInList = function(url, callback) {
   exports.readListOfUrls(function(data) {
-    // console.log('this is url: ', url);
-    // console.log('this is data: ', data);
     callback(data.includes(url));
   });
-//call this function first after given a POSTed url
-  
-//sites.txt: ['www.google.com', 'yahoo.com']
-  // if (sitesText.includes(url)) {
-  //   if (isUrlArchived(url)) {
-  //     fs.readFile(archivedSites + '/' + url, 'utf8', function(err, data) {
-  //       if (err) {
-  //         throw err;
-  //       }
-  //       var archivedPage = data.toString();
-  //       return archivedPage;
-  //     });
-  //   } else {
-  //     fs.readFile(siteAssets + '/loading.html', 'utf8', function(err, data) {
-  //       if (err) {
-  //         throw err;
-  //       }
-
-  //       return data.toString();
-  //     });
-  //   }
-  // } else {
-  //   addUrlToList(url);
-  // }
-//if url exists in list
-  //call isUrlArchived
-    //if UrlArchived is true
-      //serve the stored page
-    //else
-      //serve the loading page
-//else 
-  //call addUrlToList
 };
 
 exports.addUrlToList = function(url, callback) {
 
-  fs.appendFile(exports.paths.list, url, function(err, data) {
+  fs.appendFile(exports.paths.list, (url + '\n'), function(err, data) {
     if (err) {
       throw err;
     }
-    console.log('url: ', url);
-    console.log('list? ', exports.paths.list);
     callback();
   });
     
@@ -100,19 +64,8 @@ exports.isUrlArchived = function(url, callback) {
 };
 
 exports.downloadUrls = function(urls) {
-  console.log('these are our urls: ', urls);
-  console.log('paths/archivedSites: ', this.paths.archivedSites);
-  
-  //SEE TESTING.JS FILE TAB ABOVE
-
-  // request('http://www.google.com', function (error, response, body) {
-  //   console.log('error:', error); // Print the error if one occurred
-  //   console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-  //   console.log('body:', body); // Print the HTML for the Google homepage.
-  // });
-
   urls.forEach((url) => {
-    request(url, (err, response, body) => {
+    request('http://' + url, (err, response, body) => {
       fs.writeFile(this.paths.archivedSites + '/' + url, body, 'utf8', function(err) {
         if (err) {
           throw err;
